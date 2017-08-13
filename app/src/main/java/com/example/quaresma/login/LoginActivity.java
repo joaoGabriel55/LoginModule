@@ -11,6 +11,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String tag = "log";
     private static final String PREF = "pref";
+    public static final String  NOME = "NOME";
     TextView text;
 
     @Override
@@ -18,13 +19,16 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        text = (TextView) findViewById(R.id.textView3);
+
         SharedPreferences settings = getSharedPreferences(PREF, MODE_PRIVATE);
 
         //Bundle params = getIntent().getExtras();
         String nome = settings.getString("nome", "");
 
-        text = (TextView) findViewById(R.id.textView3);
-        text.setText(nome + ", seja bem vindo.");
+        text.setText(nome);
+
+        Log.i(tag,"onCreate");
     }
 
     @Override
@@ -33,9 +37,30 @@ public class LoginActivity extends AppCompatActivity {
 
         SharedPreferences settings = getSharedPreferences(PREF, MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("nome", text.getText().toString());
+        editor.putString(NOME, text.getText().toString());
         // Commit the edits!
         editor.commit();
+
+        Log.i(tag,"onStop");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        outState.putString(NOME, text.getText().toString());
+
+        Log.i(tag,"onSave");
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+
+        text.setText(savedInstanceState.getString(NOME));
+
+        Log.i(tag,"onRestore");
     }
 
     public void clickLogout(View v){
@@ -47,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.clear();
         finish();
 
-        Log.i(tag, "LOOOOOOOOOOOL");
+        Log.i(tag, "clickLogout");
 
     }
 }
