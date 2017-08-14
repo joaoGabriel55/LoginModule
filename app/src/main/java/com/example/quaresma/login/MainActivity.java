@@ -1,11 +1,11 @@
 package com.example.quaresma.login;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,10 +14,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String USER = "pref1";
-    private static final String PASS = "pref2";
+    //private static final String USER = "pref1";
+    //private static final String PASS = "pref2";
     List<Pessoa> lista = new ArrayList<Pessoa>();
-    Context c = this;
+    //Context c = this;
     EditText user;
     EditText pass;
 
@@ -37,38 +37,52 @@ public class MainActivity extends AppCompatActivity {
         user = (EditText) findViewById(com.example.quaresma.login.R.id.username);
         pass = (EditText) findViewById(com.example.quaresma.login.R.id.password);
 
-        Button btnLogin = (Button) findViewById(com.example.quaresma.login.R.id.button);
+        SharedPreferences sp = getSharedPreferences("SP",Activity.MODE_PRIVATE);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        String nome = sp.getString("nome","");
+        String senha = sp.getString("senha","");
 
-            @Override
-            public void onClick(View v) {
+        if(!nome.isEmpty() && !senha.isEmpty()){
+            Intent i = new Intent(this, LoginActivity.class);
+            startActivity(i);
+        }
 
-                boolean entrou = false;
 
-                for (Pessoa pessoa : lista) {
-                    if (user.getText().toString().equals(pessoa.getNome()) &&
-                            pass.getText().toString().equals(pessoa.getSenha())){
+    }
 
-                        Intent intent = new Intent(c, LoginActivity.class);
+    public void entrar(View v) {
+        SharedPreferences sp = getSharedPreferences("SP", Activity.MODE_PRIVATE);
+
+        boolean entrou = false;
+
+        for (Pessoa pessoa : lista) {
+            if (user.getText().toString().equals(pessoa.getNome()) &&
+                    pass.getText().toString().equals(pessoa.getSenha())){
+
+                        /*Intent intent = new Intent(c, LoginActivity.class);
                         Bundle params = new Bundle();
                         params.putString("nome", pessoa.getNome());
                         params.putString("senha", pessoa.getSenha());
                         intent.putExtras(params);
-                        startActivity(intent);
+                        startActivity(intent);*/
 
-                        entrou = true;
-                        Toast.makeText(MainActivity.this, "Validated !", Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("nome", pessoa.getNome());
+                editor.putString("senha", pessoa.getSenha());
+                editor.commit();
 
-                        break;
-                    }
-                }
+                Intent i = new Intent(this, LoginActivity.class);
+                startActivity(i);
 
-                if (!entrou)
-                    Toast.makeText(MainActivity.this, "Invalidated !", Toast.LENGTH_SHORT).show();
+                entrou = true;
+                Toast.makeText(MainActivity.this, "Validated !", Toast.LENGTH_SHORT).show();
 
-                }
-            });
-
+                break;
+            }
         }
+
+        if (!entrou)
+            Toast.makeText(MainActivity.this, "Invalidated !", Toast.LENGTH_SHORT).show();
+
     }
+}
