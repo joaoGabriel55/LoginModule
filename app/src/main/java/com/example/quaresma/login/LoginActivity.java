@@ -31,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.i(tag,"onCreate");
     }
 
-    @Override
+   /* @Override
     protected void onStop(){
         super.onStop();
 
@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         text.setText(savedInstanceState.getString(NOME));
 
         Log.i(tag,"onRestore");
-    }
+    }*/
 
     public void clickLogout(View v){
 

@@ -59,16 +59,13 @@ public class MainActivity extends AppCompatActivity {
             if (user.getText().toString().equals(pessoa.getNome()) &&
                     pass.getText().toString().equals(pessoa.getSenha())){
 
-                        /*Intent intent = new Intent(c, LoginActivity.class);
-                        Bundle params = new Bundle();
-                        params.putString("nome", pessoa.getNome());
-                        params.putString("senha", pessoa.getSenha());
-                        intent.putExtras(params);
-                        startActivity(intent);*/
+                Intent intent = new Intent(this, LoginActivity.class);
+                Bundle params = new Bundle();
 
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("nome", pessoa.getNome());
                 editor.putString("senha", pessoa.getSenha());
+                intent.putExtras(params);
                 editor.commit();
 
                 Intent i = new Intent(this, LoginActivity.class);
